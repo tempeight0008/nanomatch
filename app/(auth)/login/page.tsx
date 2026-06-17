@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { login } from "../actions";
+import { login } from "../../../lib/actions/auth-actions";
 import { Button } from "@/components/ui/button";
 
 type LoginPageProps = {
@@ -9,15 +9,8 @@ type LoginPageProps = {
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  // const errorMessage =
-  //   typeof searchParams?.error === "string"
-  //     ? searchParams.error
-  //     : Array.isArray(searchParams?.error)
-  //     ? searchParams.error[0]
-  //     : undefined;
-  const errorMessage = (await searchParams)?.error && typeof searchParams.error === "string"
-    ? searchParams.error
-    : undefined;
+  const errorParam = searchParams?.error;
+  const errorMessage = typeof errorParam === "string" ? Array.isArray(errorParam) ? errorParam[0] : errorParam : undefined;
 
   return (
     <div className="space-y-8">
