@@ -1,0 +1,70 @@
+'use client';
+import { signup } from "@/app/(auth)/actions";
+import { Button } from "@base-ui/react";
+import { useActionState } from "react";
+
+export default function SignupForm() {
+    const [state, formAction, isPending] = useActionState(signup, null);
+
+    return (
+        <>
+            {state?.success === false && (
+                <div className="text-destructive bg-destructive/10 p-3 rounded-xl text-sm">
+                    {state.message}
+                </div>
+            )}
+            <form action={formAction} className="space-y-6">
+                <label className="grid gap-2 text-sm">
+                    <span className="font-medium text-foreground/80">Full name</span>
+                    <input
+                        name="fullName"
+                        type="text"
+                        autoComplete="name"
+                        required
+                        className="w-full rounded-2xl border border-border/80 bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    />
+                </label>
+
+                <label className="grid gap-2 text-sm">
+                    <span className="font-medium text-foreground/80">Email</span>
+                    <input
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        className="w-full rounded-2xl border border-border/80 bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    />
+                </label>
+
+                <label className="grid gap-2 text-sm">
+                    <span className="font-medium text-foreground/80">Password</span>
+                    <input
+                        name="password"
+                        type="password"
+                        autoComplete="new-password"
+                        required
+                        className="w-full rounded-2xl border border-border/80 bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    />
+                </label>
+
+                <label className="grid gap-2 text-sm">
+                    <span className="font-medium text-foreground/80">Role</span>
+                    <select
+                        name="role"
+                        required
+                        className="w-full rounded-2xl border border-border/80 bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    >
+                        <option value="" hidden>
+                            Select available role
+                        </option>
+                        <option value="designer">Designer</option>
+                        <option value="developer">Developer</option>
+                        <option value="product">Product</option>
+                    </select>
+                </label>
+
+                <Button disabled={isPending} type="submit" className="w-full">{isPending ? "Creating Account..." : "Create account"}</Button>
+            </form>
+        </>
+    )
+}

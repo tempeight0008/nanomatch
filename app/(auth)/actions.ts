@@ -1,4 +1,4 @@
-"user server";
+"use server";
 
 import { createClient } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
@@ -19,23 +19,29 @@ export async function login(formData: FormData) {
     return redirect("/dashboard");
 }
 
-export async function signup(formData: FormData){
+export async function signup(prevState: any, formData: FormData) {
     const supabase = await createClient();
+
+    console.log(prevState, formData)
 
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const fullName = formData.get('fullName') as string
     const role = formData.get('role') as string
 
-    const {error} = await supabase.auth.signUp({email, password, options: {
-        data: {
-            role,
-            full_name: fullName
+    const { error } = await supabase.auth.signUp({
+        email, password, options: {
+            data: {
+                role,
+                full_name: fullName
+            }
         }
-    }})
+    })
 
     if (error) {
-    return redirect(`/login?error=${encodeURIComponent(error.message)}`)
+        console.log(error);
+        return { success: false, message: error.message, error: JSON.stringify(error) };
+        // return redirect(`/login?error=${encodeURIComponent(error.message)}`)
     }
 
     revalidatePath('/', 'layout')
